@@ -1,2 +1,3 @@
 data/*
 entrenamiento/runs
+!entrenamiento/runs/detect/train2/weights/best.pt
