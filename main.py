@@ -1,3 +1,4 @@
+from procesamiento.initial_checks import check_same_image_sizes
 from procesamiento.convert_tiff_to_png import convert_tiff_to_png
 from procesamiento.create_blank_density_image import create_blank_density_image
 from procesamiento.combine_channels_to_rgb import combine_channels_to_rgb_batch
@@ -6,6 +7,9 @@ from procesamiento.apply_yolo import apply_yolo_to_crops
 from procesamiento.postprocess_detections import split_detections_by_level, remap_detections_to_original
 from visualizacion.visualize_detections import draw_all_detections
 from visualizacion.heatmap_visualization import draw_coverage_heatmap
+
+# Paso 0: Comprobar que todas las imágenes tienen el mismo tamaño
+check_same_image_sizes("data/P28/1cm_meanint", "data/P28/1cm_maxint")
 
 # Paso 1: Convertir TIFF a PNG
 convert_tiff_to_png("data/P28/1cm_meanint", "data/P28/png_channels/meanint")
