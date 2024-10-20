@@ -2,6 +2,7 @@ import os
 from PIL import Image
 import numpy as np
 import tifffile
+from tqdm import tqdm
 
 def convert_tiff_to_png(input_dir, output_dir):
     """
@@ -18,7 +19,8 @@ def convert_tiff_to_png(input_dir, output_dir):
     # Listar todos los archivos .tif en el directorio de entrada
     tiff_files = [f for f in os.listdir(input_dir) if f.endswith('.tif')]
     
-    for tiff_file in tiff_files:
+    # Iterar sobre los archivos .tif con tqdm para mostrar el progreso
+    for tiff_file in tqdm(tiff_files, desc="Convirtiendo TIFF a PNG", unit="archivo"):
         # Ruta completa al archivo .tif
         tiff_path = os.path.join(input_dir, tiff_file)
         
@@ -34,7 +36,6 @@ def convert_tiff_to_png(input_dir, output_dir):
         
         # Guardar la imagen en formato .png
         pil_img.save(png_path, "PNG")
-        print(f"Convertido: {tiff_file} -> {png_file}")
 
 # Uso en el main o en notebook
 # convert_tiff_to_png("data/1cm_meanint", "data/png_channels/meanint")
