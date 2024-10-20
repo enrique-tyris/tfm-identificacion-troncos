@@ -3,6 +3,9 @@ from procesamiento.create_blank_density_image import create_blank_density_image
 from procesamiento.combine_channels_to_rgb import combine_channels_to_rgb_batch
 from procesamiento.crop_images import crop_images
 from procesamiento.apply_yolo import apply_yolo_to_crops
+from procesamiento.postprocess_detections import split_detections_by_level, remap_detections_to_original
+from visualizacion.visualize_detections import draw_all_detections
+from visualizacion.heatmap_visualization import draw_coverage_heatmap
 
 # Paso 1: Convertir TIFF a PNG
 convert_tiff_to_png("data/P28/1cm_meanint", "data/P28/png_channels/meanint")
@@ -20,8 +23,16 @@ crop_images("data/P28/rgb_images/", "data/P28/crops/")
 
 # Paso 4: detectar las secciones con YOLO
 model = "train/runs/detect/train2/weights/best.pt"
-apply_yolo_to_crops("data/P28/crops", "data/P28/detections.json", model)
+apply_yolo_to_crops("data/P28/crops", "data/P28/detections/detections.json", model)
 
-# Paso 5: mapear detecciones a dimensiones de la finca
+# Paso 5.1: mapear detecciones a dimensiones de la finca
+split_detections_by_level("data/P28/detections/detections.json", "data/P28/detections/level_detections")
+remap_detections_to_original("data/P28/detections/level_detections", "data/P28/detections/remapped_detections")
 
-# Paso 6: identificación de árboles
+# Paso 5.2: visualización de detecciones
+draw_all_detections("data/P28/rgb_images", "data/P28/detections/remapped_detections", "data/P28/visualization/detections_output")
+draw_coverage_heatmap("data/P28/detections/remapped_detections", "data/P28/rgb_images", "data/P28/visualization/", min_level=100, max_level=250)
+
+# Paso 6: identificación de árboles (EJ: agrupacion direccion Z o plano XY)
+
+# Paso 7: visualización de resultados de árboles (EJ; visualizacion 3D)
