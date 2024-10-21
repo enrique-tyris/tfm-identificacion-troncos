@@ -25,6 +25,9 @@ def apply_yolo_to_crops(crop_dir, output_json_path, model_path):
     output_json_path (str): Ruta donde se guardará el archivo JSON con los resultados.
     model_path (str): Ruta al archivo del modelo YOLO entrenado (.pt).
     """
+    # Crear la carpeta de salida si no existe
+    os.makedirs(os.path.dirname(output_json_path), exist_ok=True)
+
     # Cargar el modelo YOLO
     model = load_yolo_model(model_path)
 
@@ -71,4 +74,4 @@ def apply_yolo_to_crops(crop_dir, output_json_path, model_path):
     print(f"Resultados guardados en {output_json_path}")
 
 # Ejemplo de uso
-# apply_yolo_to_crops("data/P28/crop_images", "data/P28/detections.json", "path/to/your/model.pt")
+# apply_yolo_to_crops("data/P28/crop_images", "data/P28/detections/detections.json", "path/to/your/model.pt")
