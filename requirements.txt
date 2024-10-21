@@ -10,12 +10,14 @@ supervision==0.22.0
 # Image Processing and Manipulation
 pillow==10.4.0
 tifffile==2024.8.30
+rasterio==1.4.1
 
 # Data Analysis and Visualization
 matplotlib==3.9.1
 seaborn==0.13.2
 numpy==1.26.4
 scipy==1.13.1
+geopandas==1.0.1
 
 # Progress Bar
 tqdm==4.66.4
