@@ -7,21 +7,21 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 from PIL import Image
 
-def draw_coverage_heatmap(json_dir, image_dir, output_dir, min_level=None, max_level=None):
+def draw_coverage_heatmap(json_dir, image_dir, output_dir=None, min_level=None, max_level=None):
     """
-    Crea y guarda un heatmap de cobertura de detecciones de BBoxes a partir de archivos JSON.
+    Crea y guarda (o muestra) un heatmap de cobertura de detecciones de BBoxes a partir de archivos JSON.
     Utiliza la primera imagen del directorio de imágenes para determinar el tamaño de la finca.
     Opcionalmente, limita el rango de niveles a procesar y ajusta el nombre del archivo de salida.
     
     Parameters:
     json_dir (str): Directorio que contiene los archivos JSON de detecciones.
     image_dir (str): Directorio que contiene las imágenes para determinar el tamaño de la finca.
-    output_dir (str): Directorio donde se guardará la visualización del heatmap.
+    output_dir (str, optional): Directorio donde se guardará la visualización del heatmap.
+                                Si es None, se mostrará en pantalla.
     min_level (int, optional): Número mínimo de nivel a procesar. Si es None, se procesan todos los niveles desde el principio.
     max_level (int, optional): Número máximo de nivel a procesar. Si es None, se procesan todos los niveles hasta el final.
     """
     def get_image_shape(image_dir):
-        # Obtener la primera imagen de la carpeta
         image_files = [f for f in os.listdir(image_dir) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.tif', '.tiff'))]
         if not image_files:
             raise ValueError("No se encontraron imágenes en el directorio proporcionado.")
@@ -81,18 +81,23 @@ def draw_coverage_heatmap(json_dir, image_dir, output_dir, min_level=None, max_l
 
         return coverage_grid
 
-    def draw_coverage_grid(coverage_grid, output_path):
+    def draw_coverage_grid(coverage_grid, output_path=None):
         plt.figure(figsize=(10, 8))
         plt.imshow(coverage_grid, cmap='hot', interpolation='nearest')
         plt.colorbar(label='Frecuencia de Cobertura')
         plt.title('Heatmap de Cobertura de Detecciones')
         plt.xlabel('X')
         plt.ylabel('Y')
-        plt.gca().invert_yaxis()  # Invertir eje Y para que coincida con la representación de imágenes
+        plt.gca().invert_yaxis()  # Invertir eje Y
         plt.tight_layout()
-        plt.savefig(output_path)
-        plt.close()
-        print(f"Heatmap guardado en: {output_path}")
+
+        if output_path:
+            plt.savefig(output_path)
+            plt.close()
+            print(f"Heatmap guardado en: {output_path}")
+        else:
+            plt.show()
+            print("Heatmap mostrado en pantalla.")
 
     # Obtener el tamaño de la imagen desde la primera imagen del directorio
     image_shape = get_image_shape(image_dir)
@@ -106,11 +111,12 @@ def draw_coverage_heatmap(json_dir, image_dir, output_dir, min_level=None, max_l
     else:
         level_info = ""
 
-    # Definir la ruta completa para guardar el heatmap
-    output_path = os.path.join(output_dir, f"detections_heatmap{level_info}.png")
+    output_path = os.path.join(output_dir, f"detections_heatmap{level_info}.png") if output_dir else None
     
-    # Guardar la visualización del heatmap
+    # Guardar o representar la visualización del heatmap
     draw_coverage_grid(coverage_grid, output_path)
 
 # Ejemplo de uso:
 # draw_coverage_heatmap("data/P28/detections/remapped_detections", "data/P28/rgb_images", "data/P28/visualization/", min_level=75, max_level=185)
+# O sin output_dir para mostrar el heatmap
+# draw_coverage_heatmap("data/P28/detections/remapped_detections", "data/P28/rgb_images", min_level=75, max_level=185)

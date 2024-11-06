@@ -8,9 +8,14 @@ from procesamiento.apply_yolo import apply_yolo_to_crops
 from procesamiento.postprocess_detections import split_detections_by_level, remap_detections_to_original
 from visualizacion.visualize_detections import draw_all_detections
 from visualizacion.heatmap_visualization import draw_coverage_heatmap
+from evaluacion.tree_identification import detect_trees_from_heatmap
 
-# Definir el identificador de la finca
-finca = "P28"
+# Definir el identificador de la finca  
+finca = "P7"
+
+# Definir los niveles mínimo y máximo de procesamiento
+min_level = 100
+max_level = 250
 
 # Paso 0: Comprobar que todas las imágenes tienen el mismo tamaño
 check_same_image_sizes(f"data/{finca}/1cm_meanint", f"data/{finca}/1cm_maxint")
@@ -39,8 +44,9 @@ remap_detections_to_original(f"data/{finca}/detections/level_detections", f"data
 
 # Paso 5.2: Visualización de detecciones
 draw_all_detections(f"data/{finca}/rgb_images", f"data/{finca}/detections/remapped_detections", f"data/{finca}/visualization/detections_output")
-draw_coverage_heatmap(f"data/{finca}/detections/remapped_detections", f"data/{finca}/rgb_images", f"data/{finca}/visualization/", min_level=100, max_level=250)
+draw_coverage_heatmap(f"data/{finca}/detections/remapped_detections", f"data/{finca}/rgb_images", 
+                      f"data/{finca}/visualization/", min_level=min_level, max_level=max_level)
 
-# Paso 6: Identificación de árboles (EJ: agrupacion dirección Z o plano XY)
-
-# Paso 7: Visualización de resultados de árboles (EJ: visualización 3D)
+# Paso 6: Identificación de árboles
+detect_trees_from_heatmap(f"data/{finca}/detections/remapped_detections", f"data/{finca}/rgb_images", 
+                          f"data/{finca}/results/tree_centers.json", min_level=min_level, max_level=max_level)
