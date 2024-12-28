@@ -3,7 +3,7 @@ En este repositorio se encuentra el trabajo realizado para el Trabajo de Fin de 
 
 El script principal `main.py` contiene todos los pasos de ejecución para el procesamiento de rasterizaciones obtenidas a partir de una nube de puntos de una finca forestal, devolviendo un archivo JSON con la posición XY de los árboles detectados. Solamente hay que ubicar en la carpeta `data/` una subcarpeta con el nombre de una finca, EJ `P28/` según la nomenclatura utilizada, conteniendo las carpetas `1cm_maxint/` y `1cm_meanint/` con los archivos TIFF de las rasterizaciones de la finca según estas variables. El resto es indicar la finca a procesar en el `main.py` y ejecutar.
 
-Hay que crear un entorno de Anaconda y dentro instalar los paquetes necesarios mediante `pip install requirements.txt` para que pueda funcionar el procesamiento.
+Hay que crear un entorno de Anaconda y dentro instalar los paquetes necesarios mediante `pip install -r requirements.txt` para que pueda funcionar el procesamiento.
 
 ### Explicación de los diferentes directorios:
 - En la carpeta `data/` se deben ubicar los archivos de input y se ubicarán los archivos de pasos intermedios y output.
